@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin name="External API PreReceive Hook"
+                  key="com.gateops.external-api-hook"
+                  plugins-version="2">
+
+    <plugin-info>
+        <description>Rejects pushes to specific branches unless an external API returns HTTP 200.</description>
+        <version>1.0.0</version>
+        <vendor name="My Company" url="http://www.gateops.com"/>
+    </plugin-info>
+
+    <!-- Internationalization bundle -->
+    <resource type="i18n" name="i18n" location="i18n/external-api-hook"/>
+
+    <!-- Compile-time pre-compiled Soy templates & other static assets -->
+    <web-resource key="external-api-hook-resources" name="External API Hook Resources">
+        <!-- Bitbucket’ın çekirdek UI kaynaklarına bağımlılık -->
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-resources</dependency>
+
+        <!-- Soy tarafından derlenen JS şablon dosyası -->
+        <resource type="download"
+                  name="externalapi.soy.js"
+                  location="/templates/com/gateops/bitbucket/hook/externalapi.soy.js"/>
+
+        <!-- Bu kaynak yalnızca repository ayar sayfalarında yüklenir -->
+        <context>repository-admin</context>
+    </web-resource>
+
+    <!-- Pre-receive hook tanımı -->
+    <repository-hook key="externalApiHook"
+                     name="External API Branch Hook"
+                     class="com.gateops.bitbucket.hooks.ExternalApiPreReceiveHook">
+        <description>Call external API on push and reject if it returns an error.</description>
+
+        <!-- Yapılandırma formu (config form) -->
+        <config-form key="externalApiHook-config"
+                     name="External API Hook Configuration">
+            <!-- Soy namespace + template adı -->
+            <view>com.gateops.bitbucket.hook.externalapi.formContents</view>
+            <!-- Yukarıda tanımlı web-resource’u yükle -->
+            <resource>external-api-hook-resources</resource>
+        </config-form>
+
+        <!-- Kullanıcıdan gelen form verilerini doğrulamak için validator -->
+        <validator>com.gateops.bitbucket.validator.ExternalApiHookValidator</validator>
+    </repository-hook>
+
+</atlassian-plugin>

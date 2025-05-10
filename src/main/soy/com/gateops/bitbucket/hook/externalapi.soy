@@ -1,0 +1,24 @@
+{namespace com.gateops.bitbucket.hooks.externalapi}
+
+/**
+ * @param config The current configuration settings.
+ * @param errors Validation errors for the settings (if any).
+ */
+{template .formContents}
+    {call aui.form.textField}
+        {param id: 'apiUrl' /}
+        {param value: $config['apiUrl'] /}
+        {param labelContent: getText('externalapi.hook.apiUrl.label') /}
+        {param description: getText('externalapi.hook.apiUrl.description') /}
+        {param extraClasses: 'long' /}
+        {param errorText: $errors['apiUrl'] /}
+    {/call}
+    {call aui.form.textField}
+        {param id: 'branches' /}
+        {param value: $config['branches'] /}
+        {param labelContent: getText('externalapi.hook.branches.label') /}
+        {param description: getText('externalapi.hook.branches.description') /}
+        {param extraClasses: 'long' /}
+        {param errorText: $errors['branches'] /}
+    {/call}
+{/template}
