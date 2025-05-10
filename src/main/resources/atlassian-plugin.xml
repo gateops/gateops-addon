@@ -36,9 +36,9 @@
         <config-form key="externalApiHook-config"
                      name="External API Hook Configuration">
             <!-- Soy namespace + template adı -->
-            <view>com.gateops.bitbucket.hook.externalapi.formContents</view>
+            <view>com.gateops.bitbucket.hooks.externalapi.formContents</view>
             <!-- Yukarıda tanımlı web-resource’u yükle -->
-            <resource>external-api-hook-resources</resource>
+            <resource name="external-api-hook-resources">external-api-hook-resources</resource>
         </config-form>
 
         <!-- Kullanıcıdan gelen form verilerini doğrulamak için validator -->
