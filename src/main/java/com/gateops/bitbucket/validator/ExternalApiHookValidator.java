@@ -14,10 +14,10 @@ public class ExternalApiHookValidator implements SettingsValidator {
         String apiUrl = settings.getString("apiUrl", "");
         String branches = settings.getString("branches", "");
 
-        if (apiUrl.isBlank()) {
+        if (apiUrl.isEmpty()) {
             errors.addFieldError("apiUrl", "API URL is required.");
         }
-        if (branches.isBlank()) {
+        if (branches.isEmpty()) {
             errors.addFieldError("branches", "At least one branch must be specified.");
         }
     }

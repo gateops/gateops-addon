@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<atlassian-plugin name="External API PreReceive Hook"
-                  key="com.gateops.external-api-hook"
-                  plugins-version="2">
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
 
-    <plugin-info>
+<plugin-info>
         <description>Rejects pushes to specific branches unless an external API returns HTTP 200.</description>
         <version>1.0.0</version>
-        <vendor name="My Company" url="http://www.gateops.com"/>
-    </plugin-info>
-
-    <!-- Internationalization bundle -->
-    <resource type="i18n" name="i18n" location="i18n/external-api-hook"/>
+        <vendor name="GateOps" url="http://www.gateops.com"/>
+    <param name="plugin-icon">images/pluginIcon.png</param>
+    <param name="plugin-logo">images/pluginLogo.png</param>
+</plugin-info>
 
     <!-- Compile-time pre-compiled Soy templates & other static assets -->
     <web-resource key="external-api-hook-resources" name="External API Hook Resources">
         <!-- Bitbucket’ın çekirdek UI kaynaklarına bağımlılık -->
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.bitbucket.server.bitbucket-web-resources</dependency>
 
         <!-- Soy tarafından derlenen JS şablon dosyası -->
-        <resource type="download"
-                  name="externalapi.soy.js"
-                  location="/templates/com/gateops/bitbucket/hook/externalapi.soy.js"/>
+        <resource type="download" name="externalapi-config.soy.js" location="templates/externalapi-config.soy.js"/>
+        <resource type="download" name="external-api-hook.css" location="css/external-api-hook.css"/>
+        <resource type="download" name="external-api-hook.js" location="js/external-api-hook.js"/>
+        <resource type="download" name="images/" location="images"/>
 
         <!-- Bu kaynak yalnızca repository ayar sayfalarında yüklenir -->
-        <context>repository-admin</context>
+        <context>bitbucket.hook.settings</context>
     </web-resource>
 
     <!-- Pre-receive hook tanımı -->
@@ -38,7 +37,7 @@
             <!-- Soy namespace + template adı -->
             <view>com.gateops.bitbucket.hooks.externalapi.formContents</view>
             <!-- Yukarıda tanımlı web-resource’u yükle -->
-            <resource name="external-api-hook-resources">external-api-hook-resources</resource>
+            <resource name="external-api-hook-resources"/>
         </config-form>
 
         <!-- Kullanıcıdan gelen form verilerini doğrulamak için validator -->

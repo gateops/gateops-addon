@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,13 +12,24 @@
 
     <properties>
         <bitbucket.version>8.18.0</bitbucket.version>
+        <amps.version>8.6.0</amps.version>
+        <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
         <spring.framework.version>5.3.29</spring.framework.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
+        <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
+        <javax.inject.version>1</javax.inject.version>
+        <jsr311.version>1.1.1</jsr311.version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
         <repository>
             <id>atlassian-public</id>
             <url>https://maven.atlassian.com/repository/public</url>
@@ -30,64 +41,131 @@
             <id>atlassian-public</id>
             <url>https://maven.atlassian.com/repository/public</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </pluginRepository>
     </pluginRepositories>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.atlassian.bitbucket.server</groupId>
+                <artifactId>bitbucket-parent</artifactId>
+                <version>${bitbucket.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Bitbucket core API -->
         <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-api</artifactId>
-            <version>${bitbucket.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- SPI interfaces (PreRepositoryHook, RepositorySettingsValidator, etc.) -->
         <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-spi</artifactId>
-            <version>${bitbucket.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Hook request/response types -->
         <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-webhooks-api</artifactId>
             <version>${bitbucket.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Spring RestTemplate -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.framework.version}</version>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-annotation</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.sal</groupId>
+            <artifactId>sal-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version>${jsr311.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-webresource-plugin</artifactId>
+            <version>4.4.4-bitbucket1</version>               <!-- shipped with BB 8.18  :contentReference[oaicite:2]{index=2} -->
+            <scope>provided</scope>                           <!-- Bitbucket already bundles it -->
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Atlassian plugin packaging -->
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>bitbucket-maven-plugin</artifactId>
-                <version>8.0.0</version>
+                <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <product>bitbucket</product>
-                    <productVersion>${bitbucket.version}</productVersion>
-                    <productDataVersion>${bitbucket.version}</productDataVersion>
+                    <productVersion>8.18.0</productVersion>
+                    <enableQuickReload>true</enableQuickReload>
+                    <compressResources>false</compressResources>
+                    <products>
+                        <product>
+                            <id>bitbucket</id>
+                            <instanceId>bitbucket</instanceId>
+                            <version>${bitbucket.version}</version>
+                            <dataVersion>${bitbucket.data.version}</dataVersion>
+                        </product>
+                    </products>
+                    <instructions>
+                        <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
+                        <!-- Add package to export here -->
+                        <Export-Package>com.gateops.bitbucket</Export-Package>
+                        <!-- Add package import here -->
+                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
+                        <!-- Ensure plugin is Spring powered -->
+                        <Spring-Context>*</Spring-Context>
+                    </instructions>
                 </configuration>
             </plugin>
-
-            <!-- Java compiler -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <groupId>com.atlassian.plugin</groupId>
+                <artifactId>atlassian-spring-scanner-maven-plugin</artifactId>
+                <version>${atlassian.spring.scanner.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>atlassian-spring-scanner</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <verbose>false</verbose>
                 </configuration>
             </plugin>
         </plugins>
