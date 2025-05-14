@@ -7,10 +7,13 @@
     <groupId>com.gateops.bitbucket</groupId>
     <artifactId>external-api-hook</artifactId>
     <version>1.0.0</version>
-    <name>External API PreReceive Hook</name>
+    <name>GateOps PreRecieve Hook</name>
     <packaging>atlassian-plugin</packaging>
 
     <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <bitbucket.version>8.18.0</bitbucket.version>
         <amps.version>8.6.0</amps.version>
         <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
@@ -20,19 +23,21 @@
         <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
         <javax.inject.version>1</javax.inject.version>
         <jsr311.version>1.1.1</jsr311.version>
+        <sal.version>4.0.0</sal.version>
+        <templaterenderer.version>7.0.0</templaterenderer.version>
     </properties>
 
     <repositories>
+        <repository>
+            <id>atlassian-public</id>
+            <url>https://maven.atlassian.com/repository/public</url>
+        </repository>
         <repository>
             <id>central</id>
             <name>Maven Central</name>
             <url>https://repo1.maven.org/maven2/</url>
             <releases><enabled>true</enabled></releases>
             <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
-            <id>atlassian-public</id>
-            <url>https://maven.atlassian.com/repository/public</url>
         </repository>
     </repositories>
 
@@ -130,7 +135,7 @@
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <productVersion>8.18.0</productVersion>
+                    <productVersion>${bitbucket.version}</productVersion>
                     <enableQuickReload>true</enableQuickReload>
                     <compressResources>false</compressResources>
                     <products>
