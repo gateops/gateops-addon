@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+<atlassian-plugin key="${atlassian.plugin.key}"
+                  name="${project.name}"
+                  plugins-version="2">
 
     <plugin-info>
         <description>Rejects pushes to specific branches unless an external API returns HTTP 200.</description>
@@ -9,9 +11,9 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
 
-    <!-- Compile-time pre-compiled Soy templates & other static assets -->
-    <web-resource key="external-api-hook-resources" name="External API Hook Resources">
-        <!-- Bitbucket’ın çekirdek UI kaynaklarına bağımlılık -->
+    <!-- Orijinal web-resource, repo admin sayfası bağlamında yüklensin -->
+    <web-resource key="external-api-hook-resources"
+                  name="External API Hook Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.bitbucket.server.bitbucket-web-resources</dependency>
         <dependency>com.atlassian.soy.soy-template-plugin:soy-deps</dependency>
@@ -22,22 +24,43 @@
             <transformer key="jsI18n"/>
         </transformation>
 
-        <!-- Soy tarafından derlenen JS şablon dosyası -->
-        <resource type="download" name="js/externalapi-config.soy.js" location="templates/externalapi-config.soy.js"/>
-        <resource type="download" name="external-api-hook.css" location="css/external-api-hook.css"/>
-        <resource type="download" name="external-api-hook.js" location="js/external-api-hook.js"/>
-        <resource type="download" name="images/" location="images"/>
+        <resource type="download"
+                  name="js/externalapi-config.soy.js"
+                  location="templates/externalapi-config.soy.js"/>
+        <resource type="download"
+                  name="external-api-hook.css"
+                  location="css/external-api-hook.css"/>
+        <resource type="download"
+                  name="external-api-hook.js"
+                  location="js/external-api-hook.js"/>
+        <resource type="download"
+                  name="images/"
+                  location="images/"/>
 
-        <!-- Bu kaynak yalnızca repository ayar sayfalarında yüklenir -->
-        <context>bitbucket.hook.settings</context>
+        <!-- sadece repository admin sayfasında yükle -->
+        <context>bitbucket.repository.admin</context>
     </web-resource>
 
-
-    <!-- Pre-receive hook tanımı -->
+    <!-- 4) Pre-receive hook tanımı -->
     <repository-hook key="externalApiHook"
                      name="External API Branch Hook"
                      class="com.gateops.bitbucket.hooks.ExternalApiPreReceiveHook">
         <description>Call external API on push and reject if it returns an error.</description>
     </repository-hook>
+
+    <web-item key="external-api-hook-config-link"
+              section="bitbucket.repository.settings.panel/repository-settings-addons-section"
+              weight="100">
+        <label>External API Hook Settings</label>
+        <link>/plugins/servlet/external-api-hook/config?repoId=$repository.id</link>
+    </web-item>
+
+    <!-- 6) Config sayfası servlet’i -->
+    <servlet key="externalApiHookConfigServlet"
+             name="External API Hook Config Servlet"
+             class="com.gateops.bitbucket.servlet.ConfigServlet">
+        <description>Configuration page for External API Hook</description>
+        <url-pattern>/external-api-hook/config</url-pattern>
+    </servlet>
 
 </atlassian-plugin>

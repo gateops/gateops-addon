@@ -1,0 +1,24 @@
+<html>
+<body>
+<h2>External API Hook Settings for Repository: $repository.name</h2>
+<form action="" method="post">
+    <input type="hidden" name="repoId" value="$repository.id"/>
+
+    <label>
+        <input type="checkbox" name="enabled"
+               #if("$enabled" == "true")checked#end />
+        Enabled
+    </label><br/><br/>
+
+    <label>API URL:<br/>
+        <input type="text" name="apiUrl" size="50" value="$!{apiUrl}"/>
+    </label><br/><br/>
+
+    <label>Branches (comma-separated):<br/>
+        <input type="text" name="branches" size="50" value="$!{branches}"/>h
+    </label><br/><br/>
+
+    <input type="submit" value="Save"/>
+</form>
+</body>
+</html>

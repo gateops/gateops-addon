@@ -6,7 +6,9 @@ import com.atlassian.bitbucket.hook.repository.RepositoryHookResult;
 import com.atlassian.bitbucket.hook.repository.RepositoryPushHookRequest;
 
 import javax.annotation.Nonnull;
+import javax.inject.Named;
 
+@Named("externalApiHook")
 public class ExternalApiPreReceiveHook implements PreRepositoryHook<RepositoryPushHookRequest> {
 
     @Nonnull

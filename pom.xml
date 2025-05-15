@@ -11,40 +11,53 @@
     <packaging>atlassian-plugin</packaging>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <bitbucket.version>8.18.0</bitbucket.version>
         <amps.version>8.6.0</amps.version>
         <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
-        <spring.framework.version>5.3.29</spring.framework.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
         <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
-        <javax.inject.version>1</javax.inject.version>
-        <jsr311.version>1.1.1</jsr311.version>
-        <sal.version>4.0.0</sal.version>
-        <templaterenderer.version>7.0.0</templaterenderer.version>
     </properties>
 
     <repositories>
         <repository>
             <id>atlassian-public</id>
-            <url>https://maven.atlassian.com/repository/public</url>
+            <name>Atlassian Public Packages</name>
+            <url>https://packages.atlassian.com/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>central</id>
             <name>Maven Central</name>
             <url>https://repo1.maven.org/maven2/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>false</enabled></snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>atlassian-public</id>
-            <url>https://maven.atlassian.com/repository/public</url>
+            <name>Atlassian Public Packages</name>
+            <url>https://packages.atlassian.com/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </pluginRepository>
         <pluginRepository>
             <id>central</id>
@@ -88,42 +101,38 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.atlassian.sal</groupId>
+            <artifactId>sal-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.templaterenderer</groupId>
+            <artifactId>atlassian-template-renderer-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.sal</groupId>
-            <artifactId>sal-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>${jsr311.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.atlassian.plugins</groupId>
             <artifactId>atlassian-plugins-webresource-plugin</artifactId>
-            <version>4.4.4-bitbucket1</version>               <!-- shipped with BB 8.18  :contentReference[oaicite:2]{index=2} -->
-            <scope>provided</scope>                           <!-- Bitbucket already bundles it -->
+            <version>4.4.4-bitbucket1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-runtime</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
@@ -149,9 +158,15 @@
                     <instructions>
                         <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
                         <!-- Add package to export here -->
-                        <Export-Package>com.gateops.bitbucket</Export-Package>
+                        <Export-Package>com.gateops.bitbucket.*</Export-Package>
+                        <Export-Package>
+                            com.gateops.bitbucket.servlet,
+                            com.gateops.bitbucket.hooks
+                        </Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
+                        <Import-Package>org.springframework.osgi.*;resolution:="optional",
+                            org.eclipse.gemini.blueprint.*;resolution:="optional", *
+                        </Import-Package>
                         <!-- Ensure plugin is Spring powered -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>
