@@ -11,9 +11,8 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
 
-    <!-- Orijinal web-resource, repo admin sayfası bağlamında yüklensin -->
     <web-resource key="external-api-hook-resources"
-                  name="External API Hook Resources">
+                  name="GateOps Hook Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.bitbucket.server.bitbucket-web-resources</dependency>
         <dependency>com.atlassian.soy.soy-template-plugin:soy-deps</dependency>
@@ -37,13 +36,11 @@
                   name="images/"
                   location="images/"/>
 
-        <!-- sadece repository admin sayfasında yükle -->
         <context>bitbucket.repository.admin</context>
     </web-resource>
 
-    <!-- 4) Pre-receive hook tanımı -->
     <repository-hook key="externalApiHook"
-                     name="External API Branch Hook"
+                     name="GateOps PreRecieve Hook"
                      class="com.gateops.bitbucket.hooks.ExternalApiPreReceiveHook">
         <description>Call external API on push and reject if it returns an error.</description>
     </repository-hook>
@@ -51,15 +48,14 @@
     <web-item key="external-api-hook-config-link"
               section="bitbucket.repository.settings.panel/repository-settings-addons-section"
               weight="100">
-        <label>External API Hook Settings</label>
+        <label>GateOps Hook Settings</label>
         <link>/plugins/servlet/external-api-hook/config?repoId=$repository.id</link>
     </web-item>
 
-    <!-- 6) Config sayfası servlet’i -->
     <servlet key="externalApiHookConfigServlet"
-             name="External API Hook Config Servlet"
+             name="GateOps Hook Config Servlet"
              class="com.gateops.bitbucket.servlet.ConfigServlet">
-        <description>Configuration page for External API Hook</description>
+        <description>Configuration page for GateOps Hook</description>
         <url-pattern>/external-api-hook/config</url-pattern>
     </servlet>
 
