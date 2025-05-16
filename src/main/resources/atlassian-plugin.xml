@@ -9,6 +9,10 @@
         <vendor name="GateOps" url="http://www.gateops.com"/>
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
+
+        <plugin-dependencies>
+            <plugin key="com.atlassian.sal.core"/>
+        </plugin-dependencies>
     </plugin-info>
 
     <web-resource key="external-api-hook-resources"

@@ -164,8 +164,15 @@
                             com.gateops.bitbucket.hooks
                         </Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>org.springframework.osgi.*;resolution:="optional",
-                            org.eclipse.gemini.blueprint.*;resolution:="optional", *
+                        <Import-Package>
+                            org.springframework.*;resolution:=optional,
+                            com.atlassian.plugin.spring.scanner.*;resolution:=optional,
+                            com.atlassian.sal.api.*;resolution:=optional,
+                            com.atlassian.bitbucket.*;resolution:=optional,
+                            com.atlassian.templaterenderer.*;resolution:=optional,
+                            javax.inject,
+                            javax.servlet,
+                            *
                         </Import-Package>
                         <!-- Ensure plugin is Spring powered -->
                         <Spring-Context>*</Spring-Context>
@@ -185,7 +192,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <verbose>false</verbose>
+                    <includeExclude>+com.gateops.bitbucket.*</includeExclude>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
         </plugins>
