@@ -15,7 +15,7 @@
     </label><br/><br/>
 
     <label>Branches (comma-separated):<br/>
-        <input type="text" name="branches" size="50" value="$!{branches}"/>h
+        <input type="text" name="branches" size="50" value="$!{branches}"/>
     </label><br/><br/>
 
     <input type="submit" value="Save"/>
